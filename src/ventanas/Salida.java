@@ -125,7 +125,7 @@ public class Salida extends javax.swing.JFrame {
             }
         });
 
-        jButton1_archivo.setText("Descargar archivo de tokens");
+        jButton1_archivo.setText("Generar archivo de tokens");
         jButton1_archivo.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton1_archivo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -152,7 +152,7 @@ public class Salida extends javax.swing.JFrame {
                         .addComponent(jLabel1_name_simbol)
                         .addGap(169, 169, 169)
                         .addComponent(jLabel1_nameError)))
-                .addContainerGap(76, Short.MAX_VALUE))
+                .addContainerGap(86, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
