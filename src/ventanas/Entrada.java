@@ -6,7 +6,7 @@
 package ventanas;
 
 import javax.swing.JOptionPane;
-
+import java.io.*;
 
 /**
  *
@@ -20,7 +20,7 @@ public class Entrada extends javax.swing.JFrame {
      */
     public Entrada() {
         initComponents();
-        setSize(475,390);
+        setSize(998, 404);
         setResizable(false);
         setTitle("Analizador Sintáctico");
         setLocationRelativeTo(null);
@@ -40,6 +40,14 @@ public class Entrada extends javax.swing.JFrame {
         txt_Expresion = new javax.swing.JTextArea();
         jButton1_Analiza = new javax.swing.JButton();
         jLabel1_Instruccion = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2_Tabla_Simbolos = new javax.swing.JTable();
+        jLabel1_name_simbol = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable2_Tabla_Error = new javax.swing.JTable();
+        jButton1_archivo = new javax.swing.JButton();
+        jButton1_Limpiar = new javax.swing.JButton();
+        jLabel1_nameError = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -49,7 +57,7 @@ public class Entrada extends javax.swing.JFrame {
         txt_Expresion.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jScrollPane1.setViewportView(txt_Expresion);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 80, 310, 180));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 310, 180));
 
         jButton1_Analiza.setText("Analiza");
         jButton1_Analiza.setBorder(null);
@@ -58,12 +66,86 @@ public class Entrada extends javax.swing.JFrame {
                 jButton1_AnalizaActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1_Analiza, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 280, 80, 40));
+        getContentPane().add(jButton1_Analiza, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 290, 80, 40));
 
         jLabel1_Instruccion.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1_Instruccion.setText("Ingresa la expresión a analizar");
         jLabel1_Instruccion.setBorder(new javax.swing.border.MatteBorder(null));
-        getContentPane().add(jLabel1_Instruccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 40, -1, -1));
+        getContentPane().add(jLabel1_Instruccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, -1, -1));
+
+        jTable2_Tabla_Simbolos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Lexema", "Token"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(jTable2_Tabla_Simbolos);
+
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 30, 200, 370));
+
+        jLabel1_name_simbol.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel1_name_simbol.setText("Tabla de símbolos");
+        jLabel1_name_simbol.setBorder(new javax.swing.border.MatteBorder(null));
+        getContentPane().add(jLabel1_name_simbol, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 0, -1, -1));
+
+        jTable2_Tabla_Error.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Token Error", "Lexema", "Línea", "Descripción"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(jTable2_Tabla_Error);
+
+        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 30, 320, 370));
+
+        jButton1_archivo.setText("Generar archivo de tokens");
+        jButton1_archivo.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButton1_archivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1_archivoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1_archivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 170, 150, 20));
+
+        jButton1_Limpiar.setText("Limpiar");
+        jButton1_Limpiar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButton1_Limpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1_LimpiarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1_Limpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 230, -1, -1));
+
+        jLabel1_nameError.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel1_nameError.setText("Tabla de error");
+        jLabel1_nameError.setBorder(new javax.swing.border.MatteBorder(null));
+        getContentPane().add(jLabel1_nameError, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -72,12 +154,41 @@ public class Entrada extends javax.swing.JFrame {
        expresion = txt_Expresion.getText();
        
        if(!expresion.equals("") ){
-          dispose();
-          new Salida().setVisible(true);
+          
        }else{
            JOptionPane.showMessageDialog(null, "Debes ingresar una expresión para analizarla");
         }
     }//GEN-LAST:event_jButton1_AnalizaActionPerformed
+
+    private void jButton1_archivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1_archivoActionPerformed
+
+        File archivo;
+        PrintWriter token;
+
+        archivo = new File ("C:\\Users\\fmedi\\Desktop\\archivo_de_tokens.txt");
+        if(!archivo.exists()){
+            JOptionPane.showMessageDialog(null, "Archivo de tokens creado");
+            try{
+                archivo.createNewFile();
+            }catch(IOException e){
+                JOptionPane.showMessageDialog(null, "No se ha podido crear el archivo de tokens" +e);
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Archivo de tokens sobreescrito");
+            try {
+                token = new PrintWriter(archivo,"utf-8");
+                token.println("Aqui iran los tokens alv, como mandarlo? se hace despues o chamba de Sergio xd");
+                token.close();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null,e);
+            }
+
+        }
+    }//GEN-LAST:event_jButton1_archivoActionPerformed
+
+    private void jButton1_LimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1_LimpiarActionPerformed
+        
+    }//GEN-LAST:event_jButton1_LimpiarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -117,8 +228,16 @@ public class Entrada extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1_Analiza;
+    private javax.swing.JButton jButton1_Limpiar;
+    private javax.swing.JButton jButton1_archivo;
     private javax.swing.JLabel jLabel1_Instruccion;
+    private javax.swing.JLabel jLabel1_nameError;
+    private javax.swing.JLabel jLabel1_name_simbol;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable jTable2_Tabla_Error;
+    private javax.swing.JTable jTable2_Tabla_Simbolos;
     private javax.swing.JTextArea txt_Expresion;
     // End of variables declaration//GEN-END:variables
 }
