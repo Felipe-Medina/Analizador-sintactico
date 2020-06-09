@@ -6,7 +6,7 @@ import static clases.Tokens.*;
 LETRA=[a-z|A-Z]
 DIGLET=[a-z|A-Z|_|0-9]*
 ID=[LETRADIGLET*]
-TD=[i|n|t|s|r|g|f|l|o|a|d|u|b|e|h|v|c]+
+TD=[int|string|float|double|short|long|boolean|void|char]
 SEP1=[,]
 DEL=[(|)]
 DELICOR=[{|}]
@@ -26,19 +26,19 @@ espacio=[ ,\t,\r,\n]+
 {espacio} {/*Ignore*/}
 "//".* {/*Ignore*/}
 
-{TD} {lexema=yytext(); return TD }
- . {return ERLX-TD;}
+{TD} {lexema=yytext(); return TD;}
+ . {return ERLX_TD;}
 {ID} {lexema=yytext(); return ID;}
- . {return ERLX-ID;}
+ . {return ERLX_ID;}
 {DEL}|{DELICOR} {lexema=yytext(); return DEL;}
- . {return ERLX-DEL;}
+ . {return ERLX_DEL;}
 {SEP}|{SEP1} {lexema=yytext(); return SEP;}
- . {return ERLX-SEP;}
+ . {return ERLX_SEP;}
 {AS} {lexema=yytext(); return AS;}
- . {return ERLX-AS;}
+ . {return ERLX_AS;}
 {SIG} {lexema=yytext(); return SIG;}
- . {return ERLX-SIG;}
+ . {return ERLX_SIG;}
 {CNEPF} {lexema=yytext(); return CNEPF;}
- . {return ERLX-CNEPF;}
+ . {return ERLX_CNEPF;}
 {OA} {lexema=yytext(); return OA;}
- . {return ERLX-OA;}
+ . {return ERLX_OA;}
