@@ -5,8 +5,16 @@
  */
 package ventanas;
 
+import Clases.Tipo;
+import Clases.Token;
 import javax.swing.JOptionPane;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -14,17 +22,62 @@ import java.io.*;
  */
 public class Entrada extends javax.swing.JFrame {
 
-    public static String expresion = "";
+   
     /**
      * Creates new form Inicio
      */
+    ArrayList<String> tipo = new ArrayList<>();
+    ArrayList<String> tipotoken = new ArrayList<>();
+    ArrayList<String> errores = new ArrayList<>();
+    DefaultTableModel dtm = new DefaultTableModel();
+    DefaultTableModel dtm2 = new DefaultTableModel();
     public Entrada() {
         initComponents();
         setSize(998, 404);
         setResizable(false);
         setTitle("Analizador Sintáctico");
         setLocationRelativeTo(null);
+        mostrar();
             
+    }
+    int k = 0;
+
+    private ArrayList<Token> lex(String input) {
+        final ArrayList<Token> tokens = new ArrayList<Token>();
+        final StringTokenizer st = new StringTokenizer(input);
+
+        while (st.hasMoreTokens()) {
+            String palabra = st.nextToken();
+            boolean matched = false;
+
+            for (Tipo tokenTipo : Tipo.values()) {
+                Pattern patron = Pattern.compile(tokenTipo.patron);
+                Matcher matcher = patron.matcher(palabra);
+                if (matcher.find()) {
+                    Token tk = new Token();
+                    tk.setTipo(tokenTipo);
+                    tk.setValor(palabra);
+                    tokens.add(tk);
+                    matched = true;
+                }
+            }
+
+            if (!matched) {
+                //throw new RuntimeException("Se encontró un token invalido.");
+                //System.err.println("Error lexico: " + palabra);
+                errores.add(palabra);
+                for (int i = 0; i < errores.size(); i++) {
+
+                    dtm2.addRow(new Object[]{errores.get(i)});
+
+                }
+                errores.clear();
+
+            }
+
+        }
+
+        return tokens;
     }
 
     /**
@@ -94,7 +147,7 @@ public class Entrada extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jTable2_Tabla_Simbolos);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 30, 200, 370));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 30, 200, 330));
 
         jLabel1_name_simbol.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1_name_simbol.setText("Tabla de símbolos");
@@ -122,7 +175,7 @@ public class Entrada extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(jTable2_Tabla_Error);
 
-        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 30, 320, 370));
+        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 30, 320, 330));
 
         jButton1_archivo.setText("Generar archivo de tokens");
         jButton1_archivo.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -149,17 +202,44 @@ public class Entrada extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    int j = 0;
+    int i = 0;
+    String b;
     private void jButton1_AnalizaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1_AnalizaActionPerformed
-       expresion = txt_Expresion.getText();
-       
-       if(!expresion.equals("") ){
-          
-       }else{
-           JOptionPane.showMessageDialog(null, "Debes ingresar una expresión para analizarla");
+       if (txt_Expresion.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Digite caracteres en el campo");
+        }
+        ArrayList<Token> tokens = lex(txt_Expresion.getText());
+        for (Token token : tokens) {
+             b = ("" + token.getTipo());
+            String a = ("" + token.getValor());
+
+            tipo.add(a);
+            tipotoken.add(b);
+            dtm.addRow(new Object[]{tipo.get(j), tipotoken.get(j)});
+            j++;
+
         }
     }//GEN-LAST:event_jButton1_AnalizaActionPerformed
 
+    public void mostrar() {
+
+        try {
+            dtm.addColumn("Lexema");
+            dtm.addColumn("Token");
+            
+            dtm2.addColumn("Lexema");
+            dtm2.addColumn("Token error");
+            dtm2.addColumn("Línea");
+            dtm2.addColumn("Descripción");
+
+            jTable2_Tabla_Error.setModel(dtm2);
+            jTable2_Tabla_Simbolos.setModel(dtm);
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "error mostrar" + ex);
+        }
+    }
     private void jButton1_archivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1_archivoActionPerformed
 
         File archivo;
@@ -177,7 +257,7 @@ public class Entrada extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Archivo de tokens sobreescrito");
             try {
                 token = new PrintWriter(archivo,"utf-8");
-                token.println("Aqui iran los tokens alv, como mandarlo? se hace despues o chamba de Sergio xd");
+                token.println(b);
                 token.close();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null,e);
@@ -187,7 +267,14 @@ public class Entrada extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1_archivoActionPerformed
 
     private void jButton1_LimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1_LimpiarActionPerformed
-        
+         int a = dtm.getRowCount();
+        int b= dtm2.getRowCount();
+        for (int i = 0; i < a; i++) {
+            dtm.removeRow(0);  
+        }
+        for (int i = 0; i < b; i++) {
+            dtm2.removeRow(0);  
+        }
     }//GEN-LAST:event_jButton1_LimpiarActionPerformed
 
     /**
@@ -220,6 +307,7 @@ public class Entrada extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new Entrada().setVisible(true);
             }
