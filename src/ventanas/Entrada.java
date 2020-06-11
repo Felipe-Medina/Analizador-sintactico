@@ -37,7 +37,7 @@ public class Entrada extends javax.swing.JFrame {
         initComponents();
         setSize(998, 404);
         setResizable(false);
-        setTitle("Analizador Sintáctico");
+        setTitle("Analizador Léxico");
         setLocationRelativeTo(null);
         mostrar();
             
@@ -67,8 +67,9 @@ public class Entrada extends javax.swing.JFrame {
                 //throw new RuntimeException("Se encontró un token invalido.");
                 //System.err.println("Error lexico: " + palabra);
                 errores.add(palabra);
+                
                 for (int i = 0; i < errores.size(); i++) {
-
+                       
                     dtm2.addRow(new Object[]{errores.get(i)});
                 }
                 errores.clear();
