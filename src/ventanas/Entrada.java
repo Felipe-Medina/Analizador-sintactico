@@ -11,6 +11,8 @@ import javax.swing.JOptionPane;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
@@ -61,7 +63,6 @@ public class Entrada extends javax.swing.JFrame {
                     matched = true;
                 }
             }
-
             if (!matched) {
                 //throw new RuntimeException("Se encontró un token invalido.");
                 //System.err.println("Error lexico: " + palabra);
@@ -69,14 +70,10 @@ public class Entrada extends javax.swing.JFrame {
                 for (int i = 0; i < errores.size(); i++) {
 
                     dtm2.addRow(new Object[]{errores.get(i)});
-
                 }
                 errores.clear();
-
             }
-
         }
-
         return tokens;
     }
 
@@ -202,24 +199,27 @@ public class Entrada extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    int j = 0;
-    int i = 0;
-    String b;
+    int j=0;
+    int t =0;
+    String[] txt = new String[200];
     private void jButton1_AnalizaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1_AnalizaActionPerformed
-       if (txt_Expresion.getText().equals("")) {
+       t =0;
+        if (txt_Expresion.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Digite caracteres en el campo");
         }
         ArrayList<Token> tokens = lex(txt_Expresion.getText());
         for (Token token : tokens) {
-             b = ("" + token.getTipo());
+            String b = ("" + token.getTipo());
             String a = ("" + token.getValor());
-
+            txt[t]=b;
             tipo.add(a);
             tipotoken.add(b);
             dtm.addRow(new Object[]{tipo.get(j), tipotoken.get(j)});
             j++;
+            t++;
 
         }
+        
     }//GEN-LAST:event_jButton1_AnalizaActionPerformed
 
     public void mostrar() {
@@ -240,13 +240,13 @@ public class Entrada extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "error mostrar" + ex);
         }
     }
+     File archivo;
+     PrintWriter token = null;
     private void jButton1_archivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1_archivoActionPerformed
-
-        File archivo;
-        PrintWriter token;
-
+        
         archivo = new File ("C:\\Users\\fmedi\\Desktop\\archivo_de_tokens.txt");
         if(!archivo.exists()){
+            
             JOptionPane.showMessageDialog(null, "Archivo de tokens creado");
             try{
                 archivo.createNewFile();
@@ -257,13 +257,17 @@ public class Entrada extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Archivo de tokens sobreescrito");
             try {
                 token = new PrintWriter(archivo,"utf-8");
-                token.println(b);
+                
+                for (int n = 0; n < t; n++) {
+                    token.println(txt[n]);
+                }
                 token.close();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null,e);
             }
 
         }
+        
     }//GEN-LAST:event_jButton1_archivoActionPerformed
 
     private void jButton1_LimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1_LimpiarActionPerformed
@@ -275,6 +279,15 @@ public class Entrada extends javax.swing.JFrame {
         for (int i = 0; i < b; i++) {
             dtm2.removeRow(0);  
         }
+         try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(archivo));
+            bw.write("");
+            bw.close();
+            } catch (IOException ex) {
+            Logger.getLogger(Entrada.class.getName()).log(Level.SEVERE, null, ex);
+             }
+            
+        
     }//GEN-LAST:event_jButton1_LimpiarActionPerformed
 
     /**
