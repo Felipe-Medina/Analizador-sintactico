@@ -55,7 +55,7 @@ public class Entrada extends javax.swing.JFrame {
             for (Tipo tokenTipo : Tipo.values()) {
                 Pattern patron = Pattern.compile(tokenTipo.patron);
                 Matcher matcher = patron.matcher(palabra);
-                if (matcher.find()) {
+                if (matcher.matches()) {
                     Token tk = new Token();
                     tk.setTipo(tokenTipo);
                     tk.setValor(palabra);
@@ -64,8 +64,6 @@ public class Entrada extends javax.swing.JFrame {
                 }
             }
             if (!matched) {
-                //throw new RuntimeException("Se encontró un token invalido.");
-                //System.err.println("Error lexico: " + palabra);
                 errores.add(palabra);
                 
                 for (int i = 0; i < errores.size(); i++) {
@@ -76,6 +74,7 @@ public class Entrada extends javax.swing.JFrame {
             }
         }
         return tokens;
+        
     }
 
     /**
@@ -210,8 +209,8 @@ public class Entrada extends javax.swing.JFrame {
         }
         ArrayList<Token> tokens = lex(txt_Expresion.getText());
         for (Token token : tokens) {
-            String b = ("" + token.getTipo());
             String a = ("" + token.getValor());
+            String b = ("" + token.getTipo());
             txt[t]=b;
             tipo.add(a);
             tipotoken.add(b);

@@ -13,10 +13,15 @@ public enum Tipo {
     
     
     TD("(int|string|float|double|short|long|boolean|void|char)"),
+    ERLX_TD("(in|it|sring|sting|strng|strig|strin|foat|flat|flot|floa|duble|doble|doule|doube|doubl|sort|shrt|shot|"
+            + "shor|lng|log|lon|bolean|booean|boolan|"
+            + "boolan|boolen|boolea|vid|vod|voi|car|chr|cha)"),
    
-    ID("[A-Z][0-9|a-zA-Z|_]*"),
+    ID("[A-Z][0-9|a-z|_]*"),
+    ERLX_ID("[a-z][0-9|A-Z|_]*"),
     
     DEL("[(|)]"),
+    
     
     DELICOR("[{|}]"),
    
