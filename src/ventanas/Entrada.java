@@ -7,7 +7,6 @@ package ventanas;
 
 import Clases.Tipo;
 import Clases.Token;
-import javax.swing.JOptionPane;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -201,9 +200,17 @@ public class Entrada extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     int j=0;
     int t =0;
+    int n = 0;
+    int f =0;
+    int g =0;
+    int s =0;
     String[] txt = new String[200];
     private void jButton1_AnalizaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1_AnalizaActionPerformed
        t =0;
+       n = 1;
+       f=1;
+       g=1;
+       s=1;
         if (txt_Expresion.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Digite caracteres en el campo");
         }
@@ -211,13 +218,27 @@ public class Entrada extends javax.swing.JFrame {
         for (Token token : tokens) {
             String a = ("" + token.getValor());
             String b = ("" + token.getTipo());
-            txt[t]=b;
             tipo.add(a);
+            if("ID".equals(b)){
+                b = b+(n);
+                n++;
+            }else if("CNEPF".equals(b)){
+                b = b+(f);
+                f++;
+            }else if("TD".equals(b)){
+                b = b+(g);
+                g++;
+            }else if("OA".equals(b)){
+                b = b+(s);
+                s++;
+            }
             tipotoken.add(b);
+            txt[t]=b;
             dtm.addRow(new Object[]{tipo.get(j), tipotoken.get(j)});
             j++;
             t++;
-
+            
+            
         }
         
     }//GEN-LAST:event_jButton1_AnalizaActionPerformed
