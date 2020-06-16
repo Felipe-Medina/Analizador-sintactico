@@ -13,29 +13,24 @@ public enum Tipo {
     
     
     TD("(int|string|float|double|short|long|boolean|void|char)"),
-    //ERLX_TD("(in|it|sring|sting|strng|strig|strin|foat|flat|flot|floa|duble|doble|doule|doube|doubl|sort|shrt|shot|"
-           // + "shor|lng|log|lon|bolean|booean|boolan|"
-           // + "boolan|boolen|boolea|vid|vod|voi|car|chr|cha)"),
+    ERLX_TD("(in|it|sring|sting|strng|strig|strin|foat|flat|flot|floa|duble|doble|doule|doube|doubl|sort|shrt|shot|"
+           + "shor|lng|log|lon|bolean|booean|boolan|"
+           + "boolan|boolen|boolea|vid|vod|voi|car|chr|cha)"),
    
     ID("[A-Z][0-9|a-z|_]*"),
     //ERLX_ID("[a-z][0-9|A-Z|_]*"),
     
-    DEL1("[(|)]"),
+    DEL("[(|)|{|}]"),
     
-    
-    DELICOR1("[{|}]"),
-   
-    SEPCOM1("[,]"),
+    SEP("[,|;]"),
    
     AS1("[=]"),
  
     SIG1("[-?]"),
    
-    CNEPF("[0-9]+(\\.[0-9])?"),
+    CNEPF("[0-9]+(\\.[0-9]+)?"),
     
-    OA("[*|/|+|-|%|]"), 
-    
-    SEP1("[;]");
+    OA("[*|/|+|-|%|]");
     
 
     public final String patron;
