@@ -64,7 +64,7 @@ public class Entrada extends javax.swing.JFrame {
                          dtm2.addRow(new Object[]{errores.get(i),"ERLX_TD", "Linea...", "Incorrecto el TD"});
                      }
                      if(!matched){
-                         Pattern pa = Pattern.compile("[a-z][0-9|A-Z|_]*");
+                         Pattern pa = Pattern.compile("[a-z]['|@|`|~]+");
                          Matcher ma = pa.matcher(palabra);
                         if(ma.matches()){
                             dtm2.addRow(new Object[]{errores.get(i),"ERLX_ID", "Linea...", "Incorrecto el ID"});
