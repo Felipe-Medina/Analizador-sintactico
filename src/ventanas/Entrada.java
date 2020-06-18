@@ -36,7 +36,7 @@ public class Entrada extends javax.swing.JFrame {
         mostrar();
             
     }
-private ArrayList<Token> lex(String Texto_Entrada, ArrayList<Token> TokenS, ArrayList<TokenErr> TokenE) {
+public void Analizar_lex(String Texto_Entrada, ArrayList<Token> TokenS, ArrayList<TokenErr> TokenE) {
         //Arreglos auxiliares;
         //final ArrayList<TablaSim> Aux_TokenS = new ArrayList<TablaSim>();
         //final ArrayList<TablaErr> Aux_TokenE =  new ArrayList<TablaErr>();
@@ -86,7 +86,7 @@ private ArrayList<Token> lex(String Texto_Entrada, ArrayList<Token> TokenS, Arra
             
         }
 }
-public void crear_token(Tipo Tipo,String cadena,ArrayList<Token> TokensC ,ArrayList<TokenErr> TokensE,int id_ContT, String NameER,int LineTE){           
+private ArrayList<Token> crear_token(Tipo Tipo,String cadena,ArrayList<Token> TokensC ,ArrayList<TokenErr> TokensE,int id_ContT, String NameER,int LineTE){           
                 
                 boolean repetido = false;
                 System.out.println(Tipo.patron);
@@ -131,7 +131,7 @@ public void crear_token(Tipo Tipo,String cadena,ArrayList<Token> TokensC ,ArrayL
                     
                     
                 //creo que debemos de crear otro método para imprimirlo
-                }    
+       return TokensC;         }    
     }
  public boolean contRep(ArrayList<Token> Token, String lexema){
      boolean repetido=false;
@@ -270,7 +270,7 @@ public void crear_token(Tipo Tipo,String cadena,ArrayList<Token> TokensC ,ArrayL
         if (txt_Expresion.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Digite caracteres en el campo");
         }
-         ArrayList<Token> tokens = Analizar_lex(txt_Expresion.getText());
+         ArrayList<Token> tokens = crear_token(txt_Expresion.getText());
         for (Token token : tokens) {
             String a = ("" + token.getLexema());
             String b = ("" + token.getToken());
