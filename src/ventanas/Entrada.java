@@ -36,7 +36,7 @@ public class Entrada extends javax.swing.JFrame {
         mostrar();
             
     }
-public void Analizar_lex(String Texto_Entrada, ArrayList<Token> TokenS, ArrayList<TokenErr> TokenE) {
+private ArrayList<Token> lex(String Texto_Entrada, ArrayList<Token> TokenS, ArrayList<TokenErr> TokenE) {
         //Arreglos auxiliares;
         //final ArrayList<TablaSim> Aux_TokenS = new ArrayList<TablaSim>();
         //final ArrayList<TablaErr> Aux_TokenE =  new ArrayList<TablaErr>();
