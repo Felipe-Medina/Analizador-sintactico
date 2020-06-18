@@ -36,9 +36,14 @@ public class Entrada extends javax.swing.JFrame {
     private ArrayList<Token> lex(String input) {
         final ArrayList<Token> tokens = new ArrayList<Token>();
         final StringTokenizer st = new StringTokenizer(input);
-
+        char[] letras;
+        int n = 1;
         while (st.hasMoreTokens()) {
             String palabra = st.nextToken();
+            letras=palabra.toCharArray();
+            if(letras[n]=='\n'){
+                n++;
+            }
             boolean matched = false;
 
             for (Tipo tokenTipo : Tipo.values()) {
@@ -61,7 +66,7 @@ public class Entrada extends javax.swing.JFrame {
                              + "boolan|boolen|boolea|vid|vod|voi|car|chr|cha)");
                      Matcher mat = pat.matcher(palabra);
                      if (mat.matches()){
-                         dtm2.addRow(new Object[]{errores.get(i),"ERLX_TD", "Linea...", "Incorrecto el TD"});
+                         dtm2.addRow(new Object[]{errores.get(i),"ERLX_TD", "Linea..."+n, "Incorrecto el TD"});
                      }
                      if(!matched){
                          Pattern pa = Pattern.compile("[A-Z]([a-z]*['|@|`|~]+)");
@@ -226,17 +231,17 @@ public class Entrada extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     int j=0;
     int t =0;
-    int n = 0;
-    int f =0;
-    int g =0;
-    int s =0;
+    //int n = 0;
+   // int f =0;
+    //int g =0;
+    //int s =0;
     String[] txt = new String[200];
     private void jButton1_AnalizaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1_AnalizaActionPerformed
        t =0;
-       n = 1;
-       f=1;
-       g=1;
-       s=1;
+       //n = 1;
+       //f=1;
+       //g=1;
+       //s=1;
         if (txt_Expresion.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Digite caracteres en el campo");
         }
@@ -245,7 +250,7 @@ public class Entrada extends javax.swing.JFrame {
             String a = ("" + token.getValor());
             String b = ("" + token.getTipo());
             tipo.add(a);
-            if("ID".equals(b)){
+            /*if("ID".equals(b)){
                 b = b+(n);
                 n++;
             }else if("CNEPF".equals(b)){
@@ -257,7 +262,7 @@ public class Entrada extends javax.swing.JFrame {
             }else if("OA".equals(b)){
                 b = b+(s);
                 s++;
-            }
+            }*/
             tipotoken.add(b);
             txt[t]=b;
             dtm.addRow(new Object[]{tipo.get(j), tipotoken.get(j)});
