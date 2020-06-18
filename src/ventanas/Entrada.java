@@ -63,7 +63,7 @@ public class Entrada extends javax.swing.JFrame {
                          dtm2.addRow(new Object[]{errores.get(i),"ERLX_TD", "Linea...", "Incorrecto el TD"});
                      }
                      if(!matched){
-                         Pattern pa = Pattern.compile("[A-Z]([a-z]*['|@|`|~]+)");
+                         Pattern pa = Pattern.compile("['|{|}|(|)@|`|~]*[a-zA-Z][0-9|a-z|_]*['|{|}|(|)@|`|~]*");
                          Matcher ma = pa.matcher(palabra);
                         if(ma.matches()){
                             dtm2.addRow(new Object[]{errores.get(i),"ERLX_ID", "Linea...", "Incorrecto el ID"});
@@ -229,13 +229,17 @@ public class Entrada extends javax.swing.JFrame {
     int f =0;
     int g =0;
     int s =0;
+    int u =0;
+    int d =0;
     String[] txt = new String[200];
     private void jButton1_AnalizaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1_AnalizaActionPerformed
        t =0;
-       //n = 1;
-       //f=1;
-       //g=1;
-       //s=1;
+       n = 1;
+       f=1;
+       g=1;
+       s=1;
+       u=1;
+       d=1;
         if (txt_Expresion.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Digite caracteres en el campo");
         }
@@ -256,6 +260,12 @@ public class Entrada extends javax.swing.JFrame {
             }else if("OA".equals(b)){
                 b = b+(s);
                 s++;
+            }else if("SEP".equals(b)){
+                b = b+(u);
+                u++;
+            }else if("DEL".equals(b)){
+                b = b+(d);
+                d++;
             }
             tipotoken.add(b);
             txt[t]=b;
@@ -332,7 +342,11 @@ public class Entrada extends javax.swing.JFrame {
             } catch (IOException ex) {
             Logger.getLogger(Entrada.class.getName()).log(Level.SEVERE, null, ex);
              }
-            
+             n = 1;
+             f=1;
+             g=1;
+             s=1; 
+             u=1;
         
     }//GEN-LAST:event_jButton1_LimpiarActionPerformed
 
