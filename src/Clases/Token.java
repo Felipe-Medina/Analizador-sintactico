@@ -10,23 +10,23 @@ package Clases;
  * @author fmedi
  */
 public class Token {
-    private Tipo tipo;
-    private String valor;
+    private String Token;
+    private String Lexema;
 
-    public Tipo getTipo() {
-        return tipo;
+    public String getToken() {
+        return Token;
     }
 
-    public void setTipo(Tipo tipo) {
-        this.tipo = tipo;
+    public void setToken(String token) {
+        this.Token = token;
     }
 
-    public String getValor() {
-        return valor;
+    public String getLexema() {
+        return Lexema;
     }
 
-    public void setValor(String valor) {
-        this.valor = valor;
+    public void setLexema(String lexema) {
+        this.Lexema = lexema;
     }
     
 }

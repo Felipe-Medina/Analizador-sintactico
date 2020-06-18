@@ -7,6 +7,7 @@ package ventanas;
 
 import Clases.Tipo;
 import Clases.Token;
+import Clases.TokenErr;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -24,6 +25,8 @@ public class Entrada extends javax.swing.JFrame {
     ArrayList<String> errores = new ArrayList<>();
     DefaultTableModel dtm = new DefaultTableModel();
     DefaultTableModel dtm2 = new DefaultTableModel();
+    int [] contToken = new int[8];
+    ArrayList<Integer> PosicionTE = new ArrayList<>();
     public Entrada() {
         initComponents();
         setSize(1000, 450);
@@ -33,80 +36,113 @@ public class Entrada extends javax.swing.JFrame {
         mostrar();
             
     }
-    private ArrayList<Token> lex(String input) {
-        final ArrayList<Token> tokens = new ArrayList<Token>();
-        final StringTokenizer st = new StringTokenizer(input);
-
-        while (st.hasMoreTokens()) {
-            String palabra = st.nextToken();
-            boolean matched = false;
-
-            for (Tipo tokenTipo : Tipo.values()) {
-                Pattern patron = Pattern.compile(tokenTipo.patron);
-                Matcher matcher = patron.matcher(palabra);
-                if (matcher.matches()) {
-                    Token tk = new Token();
-                    tk.setTipo(tokenTipo);
-                    tk.setValor(palabra);
-                    tokens.add(tk);
-                    matched = true;
-                }
-            }
-            if (!matched) {
-                errores.add(palabra);
-                
-                for (int i = 0; i < errores.size(); i++) {
-                     Pattern pat = Pattern.compile("(in|it|sring|sting|strng|strig|strin|foat|flat|flot|floa|duble|doble|doule|doube|doubl|sort|shrt|shot|"
-                             + "shor|lng|log|lon|bolean|booean|boolan|"
-                             + "boolan|boolen|boolea|vid|vod|voi|car|chr|cha)");
-                     Matcher mat = pat.matcher(palabra);
-                     if (mat.matches()){
-                         dtm2.addRow(new Object[]{errores.get(i),"ERLX_TD", "Linea...", "Incorrecto el TD"});
-                     }
-                     if(!matched){
-                         Pattern pa = Pattern.compile("[A-Z]([a-z]*['|@|`|~]+)");
-                         Matcher ma = pa.matcher(palabra);
-                        if(ma.matches()){
-                            dtm2.addRow(new Object[]{errores.get(i),"ERLX_ID", "Linea...", "Incorrecto el ID"});
-                        }
-                        if(!matched){
-                            Pattern p = Pattern.compile("[-]?[0-9]+([a-zA-Z]+|\\.[a-zA-Z]+)");
-                            Matcher m = p.matcher(palabra);
-                            if(m.matches()){
-                                dtm2.addRow(new Object[]{errores.get(i),"ERLX_CNEPF", "Linea...", "Incorrecto el numero"});
-                            }
-                            if(!matched){
-                               Pattern pt = Pattern.compile("[(|)|{|}]+");
-                               Matcher mt = pt.matcher(palabra);
-                               if(mt.matches()){
-                                dtm2.addRow(new Object[]{errores.get(i),"ERLX_DEL", "Linea...", "Incorrecto el delimitador"});
-                                }
-                               if(!matched){
-                                 Pattern patr = Pattern.compile("[,|;]+");
-                                 Matcher matc = patr.matcher(palabra);
-                                 if(matc.matches()){
-                                    dtm2.addRow(new Object[]{errores.get(i),"ERLX_SEP", "Linea...", "Incorrecto el SEP"});
-                                 }
-                                 if(!matched){
-                                     Pattern ptr = Pattern.compile("[*|/|+|-|%|]+");
-                                     Matcher mtch = ptr.matcher(palabra);
-                                     if(mtch.matches()){
-                                     dtm2.addRow(new Object[]{errores.get(i),"ERLX_OA", "Linea...", "Incorrecto el operador "});
-                                 }
-
-                                 }
-                               }
-                            }
-                        }
-                     }
-                    
-                }
-                errores.clear();
-            }
-        }
-        return tokens;
+public void Analizar_lex(String Texto_Entrada, ArrayList<Token> TokenS, ArrayList<TokenErr> TokenE) {
+        //Arreglos auxiliares;
+        //final ArrayList<TablaSim> Aux_TokenS = new ArrayList<TablaSim>();
+        //final ArrayList<TablaErr> Aux_TokenE =  new ArrayList<TablaErr>();
+        //-----------------------------------------------------------
+        final StringTokenizer st = new StringTokenizer(Texto_Entrada);
+        char[] letras; //Almacenar la palabra por caracteres
+        ArrayList<Integer> ConTokens =  new ArrayList<Integer>();
+        int cont=0; //recorrer el arreglo para ver si es un número con punto flotante
+        int contTOKENS=0; //Sirve para contar la posición de la tabla de simbolo
+        boolean numEnt=true;
         
+        while (st.hasMoreTokens()) {
+            contTOKENS++;
+            String palabra = st.nextToken();
+            System.out.println("PALABRA--> "+palabra);
+            letras=palabra.toCharArray();  
+            if(letras[0]== '*' | letras[0]== '/' | letras[0]== '+' | letras[0]== '-'){
+                crear_token(Tipo.OA, palabra,TokenS,TokenE,2," Operador artimético",contTOKENS); //Operador aritmético 2
+                } else if(letras[0]== '=') {
+                    crear_token(Tipo.AS, palabra,TokenS,TokenE,3," Operador de asignación",contTOKENS); //Asignacion 3
+                }else if(letras[0] == 'v' | letras[0] == 'i'| letras[0] == 'f'| letras[0] == 'b' | letras[0] == 'c'| letras[0] == 'c')
+                {crear_token(Tipo.TD, palabra,TokenS,TokenE,4," Tipo de dato",contTOKENS); //Tipo de datos 4
+                }else if(letras [0]>= 'A' && letras[0]<='Z') 
+                {crear_token(Tipo.ID, palabra,TokenS,TokenE,5," Identificador",contTOKENS); //Identificadores 5s
+                }else if(letras [0]== ';' | letras[0]==',')
+                { crear_token(Tipo.SEP, palabra,TokenS,TokenE,6," Miscelaneos",contTOKENS); //Miscelaneos 6
+                }else if(letras[0] == '(' | letras[0] == ')'| letras[0] == '{'| letras[0] == '}' ){
+                    crear_token(Tipo.DEL, palabra,TokenS,TokenE,7," Delimitador",contTOKENS); //Delimitadores 7
+                }else if(letras[0]>='0'&& letras[0]<='9'){
+                    System.out.println("Entrando a los Números");
+                     while(cont<letras.length){
+                         if(letras[cont]== '.')
+                         {crear_token(Tipo.CNEPF, palabra,TokenS,TokenE,1, " Punto Flotante",contTOKENS);
+                         System.out.println("Punto encontrador, evaluarpunto flotante");
+                         numEnt=false;
+                         break;
+                         }
+                         cont++;
+                     }
+                     if(numEnt)
+                     {crear_token(Tipo.CNE, palabra,TokenS,TokenE,0, " Constante Numérica",contTOKENS);
+                         System.out.println("Constante Numérica");
+                     }
+                }else{
+                crear_token(Tipo.TD, palabra,TokenS,TokenE,4," Tipo de dato",contTOKENS);
+                }
+            
+        }
+}
+public void crear_token(Tipo Tipo,String cadena,ArrayList<Token> TokensC ,ArrayList<TokenErr> TokensE,int id_ContT, String NameER,int LineTE){           
+                
+                boolean repetido = false;
+                System.out.println(Tipo.patron);
+                Pattern patron = Pattern.compile(Tipo.patron);
+                Matcher matcher = patron.matcher(cadena); //*
+                
+                //generar TOKEN si hay
+                if (matcher.find()) {
+                    System.out.println("Generando el TOKEN CORRECTO");
+                    Token tk = new Token();
+                    repetido= contRep(TokensC,cadena); //Crear metodo contRep
+                    if(!repetido)
+                    {   contToken[id_ContT]+=1; //incrementando el contador de token
+                        String ContT_aux = String.valueOf(contToken[id_ContT]); //auxiliar INT-STRING
+                        //Agregar TOKEN Y LEXEAMA A LA TABLA
+                        tk.setToken(Tipo+ContT_aux);
+                        tk.setLexema(cadena);
+                        TokensC.add(tk); //arrayList de tipo Token
+                    }
+                }else{ //generar el ERROR
+                    System.out.println("Generando el ERROR");
+                    TokenErr tke = new TokenErr();
+                    //Realizar el mismo incremento en la parte anterior
+                    
+                    //------Agregar a la tabla de Símbolos
+                    Token tk = new Token();
+                    repetido= contRep(TokensC,cadena); //devuelve un True o False
+                        if(!repetido)
+                        {contToken[id_ContT]+=1; //incrementando el contador de token
+                        String ContT_aux = String.valueOf(contToken[id_ContT]); //auxiliar INT-STRING
+                        //------------Agregar ERRORES TABLA SIMBOLOS---------------------------------
+                        tk.setToken("ERLX"+Tipo+ContT_aux);
+                        tk.setLexema(cadena);
+                        PosicionTE.add(LineTE); //agrego la posición del TOKEN
+                        TokensC.add(tk);
+                        //---------Agregar Errores TABLA ERRORES---------------
+                        tke.setLexemaErr(cadena);
+                        tke.setTokenErr("ERLX"+Tipo+ContT_aux);
+                        tke.setDes("Incorrecto el "+NameER);
+                        TokensE.add(tke);
+                        }
+                    
+                    
+                //creo que debemos de crear otro método para imprimirlo
+                }    
     }
+ public boolean contRep(ArrayList<Token> Token, String lexema){
+     boolean repetido=false;
+     for(Token d: Token){
+         if(d.getLexema().equals(lexema)){
+             repetido = true;
+             break;
+         }
+     }
+     return repetido;
+ }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -226,46 +262,15 @@ public class Entrada extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     int j=0;
     int t =0;
-    int n = 0;
-    int f =0;
-    int g =0;
-    int s =0;
+    
     String[] txt = new String[200];
     private void jButton1_AnalizaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1_AnalizaActionPerformed
        t =0;
-       n = 1;
-       f=1;
-       g=1;
-       s=1;
+      
         if (txt_Expresion.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Digite caracteres en el campo");
         }
-        ArrayList<Token> tokens = lex(txt_Expresion.getText());
-        for (Token token : tokens) {
-            String a = ("" + token.getValor());
-            String b = ("" + token.getTipo());
-            tipo.add(a);
-            if("ID".equals(b)){
-                b = b+(n);
-                n++;
-            }else if("CNEPF".equals(b)){
-                b = b+(f);
-                f++;
-            }else if("TD".equals(b)){
-                b = b+(g);
-                g++;
-            }else if("OA".equals(b)){
-                b = b+(s);
-                s++;
-            }
-            tipotoken.add(b);
-            txt[t]=b;
-            dtm.addRow(new Object[]{tipo.get(j), tipotoken.get(j)});
-            j++;
-            t++;
-            
-            
-        }
+       
         
     }//GEN-LAST:event_jButton1_AnalizaActionPerformed
 
