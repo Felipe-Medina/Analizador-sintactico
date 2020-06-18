@@ -270,6 +270,20 @@ public void crear_token(Tipo Tipo,String cadena,ArrayList<Token> TokensC ,ArrayL
         if (txt_Expresion.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Digite caracteres en el campo");
         }
+         ArrayList<Token> tokens = Analizar_lex(txt_Expresion.getText());
+        for (Token token : tokens) {
+            String a = ("" + token.getLexema());
+            String b = ("" + token.getToken());
+            tipo.add(a);
+            
+            tipotoken.add(b);
+            txt[t]=b;
+            dtm.addRow(new Object[]{tipo.get(j), tipotoken.get(j)});
+            j++;
+            t++;
+            
+            
+        }
        
         
     }//GEN-LAST:event_jButton1_AnalizaActionPerformed
